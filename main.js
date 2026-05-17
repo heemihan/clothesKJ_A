@@ -93,7 +93,7 @@ const eventDialogues = {
   ],
   "C:C": [
     { speaker: "강혁", text: "먼저 갑니다!!!" },
-    { speaker: "재원", text: "으아아아아아!!!!!!!!!!", fontSize: "23px" },
+    { speaker: "재원", text: "으아아아아아!!!!!!!!!!", fontSize: "18px" },
     { speaker: "재원", text: "왜 아무도 안말려어어어어!!!!" },
   ],
 };

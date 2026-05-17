@@ -242,7 +242,7 @@ button {
   padding: 15px 63px 15px 20px;
   border: 7px solid #070707;
   color: #111;
-  font-size: clamp(20px, 2.7vw, 36px);
+  font-size: clamp(17px, 2.1vw, 28px);
   line-height: 1.25;
   text-align: center;
   background: var(--dialogue);
@@ -261,7 +261,7 @@ button {
   right: 24px;
   bottom: 15px;
   border: 0;
-  font-size: 36px;
+  font-size: 30px;
   background: transparent;
   cursor: pointer;
 }
@@ -515,7 +515,14 @@ button {
     right: 12%;
     min-height: 78px;
     border-width: 5px;
-    font-size: clamp(18px, 5.2vw, 28px);
+    font-size: clamp(15px, 4vw, 20px);
+    line-height: 1.22;
+  }
+
+  .dialogue button {
+    right: 18px;
+    bottom: 12px;
+    font-size: 28px;
   }
 
   .closet-card {
