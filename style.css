@@ -319,14 +319,7 @@ button {
 }
 
 .closet-rail {
-  position: absolute;
-  top: 22px;
-  left: 18px;
-  right: 18px;
-  height: 10px;
-  border-top: 5px solid #5b5f62;
-  border-bottom: 4px solid #272b30;
-  pointer-events: none;
+  display: none !important;
 }
 
 .closet-grid {
