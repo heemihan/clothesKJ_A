@@ -289,6 +289,15 @@ button {
   -webkit-overflow-scrolling: touch;
 }
 
+.closet-side::-webkit-scrollbar:vertical {
+  width: 0;
+  display: none;
+}
+
+.closet-side::-webkit-scrollbar:horizontal {
+  height: 12px;
+}
+
 .closet-side:last-child {
   border-right: 0;
 }
