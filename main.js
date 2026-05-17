@@ -261,8 +261,9 @@ function renderStage() {
     const hasEvent = Boolean(effectiveEvent);
     const eventCharacter = combo?.characters?.[side] || "";
     const hasEventCharacter = Boolean(eventCharacter);
+    const shouldHideBase = hasEventCharacter || outfit.id === "hidden";
 
-    setImageWithFallback(nodes[`${side}Base`], pathsFor(imageRoots.character, bases[side]), !hasEventCharacter);
+    setImageWithFallback(nodes[`${side}Base`], pathsFor(imageRoots.character, bases[side]), !shouldHideBase);
     setImageWithFallback(nodes[`${side}Outfit`], pathsFor(imageRoots.clothes, outfit.file), !hasEvent);
     setImageWithFallback(nodes[`${side}EventClothes`], pathsFor(imageRoots.clothes, effectiveEvent?.clothes || ""));
     setImageWithFallback(nodes[`${side}EventFace`], pathsFor(imageRoots.clothes, eventCharacter));
@@ -562,6 +563,16 @@ function closetCardFromPointer(event, fallbackCard) {
 
   const x = event.clientX;
   const y = event.clientY;
+  const fallbackRect = fallbackCard.getBoundingClientRect();
+  const isInFallback = (
+    x >= fallbackRect.left && x <= fallbackRect.right
+    && y >= fallbackRect.top && y <= fallbackRect.bottom
+  );
+
+  if (fallbackCard.dataset.id === "hidden" && isInFallback) {
+    return fallbackCard;
+  }
+
   const candidates = Array.from(grid.querySelectorAll(".closet-card"))
     .map((card) => {
       const image = card.querySelector("img");

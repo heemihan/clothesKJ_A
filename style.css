@@ -396,18 +396,18 @@ button {
 }
 
 .closet-card[data-id="hidden"][data-kind="outfit"] img {
-  transform: translateY(-330px) translateX(128px) scale(2.25);
-  opacity: 0.22;
+  transform: translateY(-330px) translateX(88px) scale(2.25);
+  opacity: 0.28;
 }
 
 .closet-card[data-id="hidden"][data-kind="outfit"] {
-  z-index: 0;
-  flex-basis: 74px;
-  margin-left: -118px;
+  z-index: 5;
+  flex-basis: 72px;
+  margin-left: -40px;
 }
 
 #leftCloset .closet-card[data-id="hidden"][data-kind="outfit"] {
-  margin-left: -102px;
+  margin-left: -40px;
 }
 
 .closet-card span {
