@@ -146,6 +146,7 @@ const nodes = {
 };
 
 let activeDrag = null;
+let pendingDrag = null;
 let dialogueTimer = null;
 let activeDialogue = null;
 
@@ -458,8 +459,27 @@ function startDrag(event) {
     return;
   }
 
-  event.preventDefault();
+  const dragData = dragDataFromEvent(event);
+  if (!dragData) {
+    return;
+  }
 
+  if (event.pointerType === "touch") {
+    pendingDrag = {
+      ...dragData,
+      startX: event.clientX,
+      startY: event.clientY,
+    };
+    window.addEventListener("pointermove", onPendingDragMove);
+    window.addEventListener("pointerup", cancelPendingDrag, { once: true });
+    window.addEventListener("pointercancel", cancelPendingDrag, { once: true });
+    return;
+  }
+
+  beginDrag(event, dragData);
+}
+
+function dragDataFromEvent(event) {
   const card = closetCardFromPointer(event, event.currentTarget);
   const side = card.dataset.side;
   const kind = card.dataset.kind;
@@ -470,19 +490,31 @@ function startDrag(event) {
     : outfits[side].find((entry) => entry.id === id);
 
   if (!item || !dragFile) {
-    return;
+    return null;
   }
 
-  activeDrag = {
+  return {
     side,
     kind,
     id,
-    ghost: makeGhost(dragFile),
+    dragFile,
+    sourceTarget: event.currentTarget,
+  };
+}
+
+function beginDrag(event, dragData) {
+  event.preventDefault();
+
+  activeDrag = {
+    side: dragData.side,
+    kind: dragData.kind,
+    id: dragData.id,
+    ghost: makeGhost(dragData.dragFile),
   };
 
   document.body.append(activeDrag.ghost);
   moveDrag(event.clientX, event.clientY);
-  event.currentTarget.setPointerCapture?.(event.pointerId);
+  dragData.sourceTarget.setPointerCapture?.(event.pointerId);
 
   const moveEvent = event.type === "mousedown" ? "mousemove" : "pointermove";
   const endEvent = event.type === "mousedown" ? "mouseup" : "pointerup";
@@ -490,6 +522,36 @@ function startDrag(event) {
   activeDrag.endEvent = endEvent;
   window.addEventListener(moveEvent, onDragMove);
   window.addEventListener(endEvent, onDragEnd, { once: true });
+}
+
+function onPendingDragMove(event) {
+  if (!pendingDrag) {
+    return;
+  }
+
+  const dx = event.clientX - pendingDrag.startX;
+  const dy = event.clientY - pendingDrag.startY;
+  const absX = Math.abs(dx);
+  const absY = Math.abs(dy);
+  if (absX < 8 && absY < 8) {
+    return;
+  }
+
+  if (absX > absY) {
+    cancelPendingDrag();
+    return;
+  }
+
+  const dragData = pendingDrag;
+  cancelPendingDrag();
+  beginDrag(event, dragData);
+}
+
+function cancelPendingDrag() {
+  window.removeEventListener("pointermove", onPendingDragMove);
+  window.removeEventListener("pointerup", cancelPendingDrag);
+  window.removeEventListener("pointercancel", cancelPendingDrag);
+  pendingDrag = null;
 }
 
 function closetCardFromPointer(event, fallbackCard) {
